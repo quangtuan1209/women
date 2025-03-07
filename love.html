@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cánh cụt dễ thương</title>
+    <link rel="stylesheet" href="main.css">
+</head>
+<body>
+    <audio id="background-music" autoplay loop>
+        <source src="love.mp3" type="audio/mp3">
+    </audio>
+    <div class="message" >
+        Em à, có những khoảnh khắc bên em mà anh chỉ muốn giữ mãi trong tim, như cách những bức ảnh này lưu lại từng kỷ niệm đẹp của chúng ta. ❤️
+    </div>
+    <div class="scrapbook">
+        <div class="scrapbook">
+            <div class="photo" style="top: 5%; left: 10%; --rotate: -8deg;">
+                <div class="pin"></div>
+                <img src="img/5.jpg" alt="Ảnh 1">
+            </div>
+            <div class="photo" style="top: 12%; left: 50%; --rotate: 6deg;">
+                <div class="pin"></div>
+                <img src="img/13.jpg" alt="Ảnh 2">
+            </div>
+            <div class="photo" style="top: 60%; left: 8%; --rotate: -10deg;">
+                <div class="pin"></div>
+                <img src="img/6.jpg" alt="Ảnh 3">
+            </div>
+            <div class="photo" style="top: 55%; left: 88%; --rotate: 7deg;">
+                <div class="pin"></div>
+                <img src="img/12.jpg" alt="Ảnh 4">
+            </div>
+            <div class="photo" style="top: 4%; left: 90%; --rotate: -10deg;">
+                <div class="pin"></div>
+                <img src="img/8.jpg" alt="Ảnh 5">
+            </div>
+            <div class="photo" style="top: 35%; left: 20%; --rotate: -6deg;">
+                <div class="pin"></div>
+                <img src="img/10.jpg" alt="Ảnh 6">
+            </div>
+            <div class="photo" style="top: 25%; left: 80%; --rotate: 6deg;">
+                <div class="pin"></div>
+                <img src="img/11.jpg" alt="Ảnh 7">
+            </div>
+            <div class="photo" style="top: 60%; left: 50%; --rotate: -10deg;">
+                <div class="pin"></div>
+                <img src="img/7.jpg" alt="Ảnh 8">
+            </div>
+        </div>
+        
+    </div>
+    <canvas id="fireworks"></canvas>
+    <canvas id="roses"></canvas>
+    
+    <script>
+        // Cấu hình canvas
+        const canvasFireworks = document.getElementById("fireworks");
+        const ctxFireworks = canvasFireworks.getContext("2d");
+        canvasFireworks.width = window.innerWidth;
+        canvasFireworks.height = window.innerHeight;
+    
+        const canvasRoses = document.getElementById("roses");
+        const ctxRoses = canvasRoses.getContext("2d");
+        canvasRoses.width = window.innerWidth;
+        canvasRoses.height = window.innerHeight;
+    
+        // Pháo hoa
+        function createFirework(x, y) {
+            let particles = [];
+            for (let i = 0; i < 50; i++) {
+                particles.push({
+                    x: x,
+                    y: y,
+                    angle: Math.random() * Math.PI * 2,
+                    speed: Math.random() * 3 + 2,
+                    life: 50
+                });
+            }
+            return particles;
+        }
+    
+        let fireworks = [];
+        setInterval(() => {
+            let randomX = Math.random() * canvasFireworks.width;
+            let randomY = Math.random() * (canvasFireworks.height / 2);
+            fireworks.push(createFirework(randomX, randomY));
+        }, 1500);
+    
+        function drawFireworks() {
+            ctxFireworks.clearRect(0, 0, canvasFireworks.width, canvasFireworks.height);
+            fireworks.forEach((firework, index) => {
+                firework.forEach((particle, i) => {
+                    particle.x += Math.cos(particle.angle) * particle.speed;
+                    particle.y += Math.sin(particle.angle) * particle.speed;
+                    particle.life--;
+                    ctxFireworks.beginPath();
+                    ctxFireworks.arc(particle.x, particle.y, 3, 0, Math.PI * 2);
+                    ctxFireworks.fillStyle = `hsl(${Math.random() * 360}, 100%, 50%)`;
+                    ctxFireworks.fill();
+                    if (particle.life <= 0) firework.splice(i, 1);
+                });
+                if (firework.length === 0) fireworks.splice(index, 1);
+            });
+            requestAnimationFrame(drawFireworks);
+        }
+    
+        // Hoa hồng rơi
+        let roseImage = new Image();
+        roseImage.src = "img/83.png"; 
+        let roses = [];
+        function createRose() {
+            return {
+                x: Math.random() * canvasRoses.width,
+                y: -100,
+                speed: Math.random() * 2 + 1,
+                angle: Math.random() * 360
+            };
+        }
+    
+        for (let i = 0; i < 10; i++) {
+            roses.push(createRose());
+        }
+    
+        function drawRoses() {
+            ctxRoses.clearRect(0, 0, canvasRoses.width, canvasRoses.height);
+            roses.forEach((rose, index) => {
+                ctxRoses.save();
+                ctxRoses.translate(rose.x, rose.y);
+                ctxRoses.rotate(rose.angle * Math.PI / 180);
+                ctxRoses.drawImage(roseImage, -10, -10, 30, 30);
+                ctxRoses.restore();
+                rose.y += rose.speed;
+                rose.angle += 1;
+    
+                if (rose.y > canvasRoses.height) {
+                    roses[index] = createRose();
+                }
+            });
+            requestAnimationFrame(drawRoses);
+        }
+    
+        roseImage.onload = () => drawRoses();
+        drawFireworks();
+    </script>
+    
+
+</body>
+</html>

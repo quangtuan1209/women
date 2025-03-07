@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LOVE HÀ <3</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div id="airplanes-container"></div>
+   
+    <div class="container" id="container">
+        <h1>Dear Hà</h1>
+        <p>Nhân dịp 8/3 - ngày Quốc tế Phụ nữ, chúc người phụ nữ tương lai của Tuấn có thật nhiều sức khoẻ, ngày càng xinh đẹp, thành công và yêu thương mình nhiều hơn ạ <3</p>
+        <p>Love you❤️</p>
+        <button class="button" id="surprise-button">Ấn vào bất ngờ</button>
+    </div>
+    <div class="pen" id="pen"></div>
+    <script>
+        const createAirplane = () => {
+            const airplane = document.createElement('div');
+            airplane.className = 'airplane';
+            airplane.style.top = `${Math.random() * 80}%`; // Vị trí ngẫu nhiên theo chiều dọc
+            airplane.innerHTML = '<img src="may_bay.png" alt="Airplane">';
+            document.getElementById('airplanes-container').appendChild(airplane);
+            airplane.addEventListener('animationend', function() {
+                document.body.style.backgroundColor = 'pink';
+                document.getElementById('container').style.display = 'block';
+                document.getElementById('pen').style.display = 'block';
+            });
+        };
+
+        // Tạo nhiều máy bay
+        for (let i = 0; i < 8; i++) {
+            setTimeout(createAirplane, i * 1000); // Tạo mỗi máy bay cách nhau 1 giây
+        }
+        document.getElementById('pen').addEventListener('animationend', function() {
+            document.getElementById('pen').style.display = 'none';
+        });
+        const createHeart = () => {
+            const heart = document.createElement('div');
+            heart.className = 'heart';
+            heart.style.top = `${Math.random() * window.innerHeight}px`;
+            heart.style.left = `${Math.random() * window.innerWidth}px`;
+            document.body.appendChild(heart);
+            setTimeout(() => heart.remove(), 5000);
+        };
+
+        const startHearts = () => {
+            setInterval(createHeart, 500);
+        };
+
+        startHearts();
+
+        // Confetti burst function
+        const createConfetti = () => {
+            const confettiCount = 100;
+            for (let i = 0; i < confettiCount; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.left = `${Math.random() * 100}%`;
+                confetti.style.top = `${Math.random() * 100}%`;
+                document.body.appendChild(confetti);
+
+                // Remove confetti after animation
+                setTimeout(() => confetti.remove(), 3000);
+            }
+        };
+
+        document.getElementById('surprise-button').addEventListener('click', function() {
+            createConfetti();
+            window.open('love.html', '_blank');
+        });
+    </script>
+</body>
+
+</html>
